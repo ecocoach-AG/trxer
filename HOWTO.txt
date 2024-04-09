@@ -1,0 +1,12 @@
+Creating Test Report with with Trxer
+
+Run according test project (separate run foreach project!):
+dotnet test --logger "trx" <Path to test project>
+-> Results are placed in <Path to test project>\.\TestResults\<TimeStamp ProjectName>.trx
+
+Add additional information
+<TestRunConfiguration><Description> $PROJECT_NAME </Description></TestRunConfiguration>
+under <TestRun> tag in generated file
+
+Run Trxer to create a html report:
+TrxerConsole.exe <Path to Trx file>

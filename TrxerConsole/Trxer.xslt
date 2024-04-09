@@ -35,7 +35,7 @@
     private string ToExtactTime(double ms)
     {
       if (ms < 1000)
-        return ms + " ms";
+        return string.Format("{0:0.00} ms", ms);
 
       if (ms >= 1000 && ms < 60000)
         return string.Format("{0:0.00} seconds", TimeSpan.FromMilliseconds(ms).TotalSeconds);
@@ -116,7 +116,7 @@
             </div>
           </div>
           <div class="SummaryDiv">
-            <table id="TotalTestsTable">
+            <!--<table id="TotalTestsTable">
               <caption>Results Summary</caption>
               <thead>
                 <tr class="odd">
@@ -137,63 +137,16 @@
                   </td>
                 </tr>
               </tbody>
-            </table>
-            <table class="DetailsTable StatusesTable">
-              <caption>Tests Statuses</caption>
-              <tbody>
-                <tr class="odd">
-                  <th class="column1 statusCount">Total</th>
-                  <td class="statusCount">
-                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@total" />
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row" class="column1 statusCount">Executed</th>
-                  <td class="statusCount">
-                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@executed" />
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row" class="column1 statusCount">Passed</th>
-                  <td class="statusCount">
-                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@passed" />
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row" class="column1 statusCount">Failed</th>
-                  <td class="statusCount">
-                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@failed" />
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row" class="column1 statusCount">Inconclusive</th>
-                  <td class="statusCount">
-                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@inconclusive" />
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row" class="column1 statusCount">Error</th>
-                  <td class="statusCount">
-                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@error" />
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row" class="column1 statusCount">Warning</th>
-                  <td class="statusCount">
-                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@warning" />
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row" class="column1 statusCount">Timeout</th>
-                  <td class="statusCount">
-                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@timeout" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            </table>-->
             <table class="SummaryTable">
-              <caption>Run Time Summary</caption>
+              <caption>Test Run Details</caption>
               <tbody>
+                <tr>
+                  <th scope="row" class="column1">Project</th>
+                  <td>
+                    <xsl:value-of select="/t:TestRun/t:TestRunConfiguration/t:Description"/>
+                  </td>
+                </tr>
                 <xsl:for-each select="/t:TestRun/t:Times">
                   <tr class="odd">
                     <th class="column1">Start Time</th>
@@ -216,7 +169,52 @@
                 </xsl:for-each>
               </tbody>
             </table>
-            <table class="DetailsTable">
+            <table class="DetailsTable StatusesTable">
+              <caption>Tests Statuses</caption>
+              <tbody>
+                <tr class="odd">
+                  <th class="column1 statusCount">Total</th>
+                  <td class="statusCount">
+                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@total" />
+                  </td>
+                  <th scope="row" class="column1 statusCount">Inconclusive</th>
+                  <td class="statusCount">
+                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@inconclusive" />
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" class="column1 statusCount">Executed</th>
+                  <td class="statusCount">
+                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@executed" />
+                  </td>
+                  <th scope="row" class="column1 statusCount">Error</th>
+                  <td class="statusCount">
+                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@error" />
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" class="column1 statusCount">Passed</th>
+                  <td class="statusCount">
+                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@passed" />
+                  </td>
+                  <th scope="row" class="column1 statusCount">Warning</th>
+                  <td class="statusCount">
+                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@warning" />
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" class="column1 statusCount">Failed</th>
+                  <td class="statusCount">
+                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@failed" />
+                  </td>
+                  <th scope="row" class="column1 statusCount">Timeout</th>
+                  <td class="statusCount">
+                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@timeout" />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!--<table class="DetailsTable">
               <caption>Tests Details</caption>
               <tbody>
                 <tr class="odd">
@@ -231,14 +229,9 @@
                     <xsl:value-of select="//t:UnitTestResult/@computerName" />
                   </td>
                 </tr>
-                <tr>
-                  <th scope="row" class="column1">Description</th>
-                  <td>
-                    <xsl:value-of select="/t:TestRun/t:TestRunConfiguration/t:Description"/>
-                  </td>
-                </tr>
+                
               </tbody>
-            </table>
+            </table>-->
           </div>
           <xsl:variable name="testsFailedSet" select="//t:TestRun/t:Results/t:UnitTestResult[@outcome='Failed']" />
           <xsl:variable name="testsFailedCount" select="count(testsFailedSet)" />
@@ -261,17 +254,17 @@
                     </div>
                   </td>
                 </tr>
-                <tr id="{generate-id(faileds)}TestsContainer" class="visibleRow">
+                <tr id="{generate-id(faileds)}TestsContainer" class="hiddenRow">
                   <td colspan="4">
-                    <div id="exceptionArrow">↳</div>
+                    <!--<div id="exceptionArrow">↳</div>-->
                     <table>
                       <thead>
                         <tr class="odd">
                           <th scope="col" class="TestsTable">Time</th>
                           <th scope="col" class="TestsTable" abbr="Status">Status</th>
                           <th scope="col" class="TestsTable" abbr="Test">Test</th>
-                          <th scope="col" class="TestsTable" abbr="Message">Message</th>
-                          <th scope="col" class="TestsTable" abbr="Message">Owner</th>
+                          <!--<th scope="col" class="TestsTable" abbr="Message">Message</th>
+                          <th scope="col" class="TestsTable" abbr="Message">Owner</th>-->
                           <th scope="col" class="TestsTable" abbr="Exception">Duration</th>
                         </tr>
                       </thead>
@@ -294,18 +287,18 @@
           <xsl:variable name="classSet" select="//t:TestMethod[generate-id(.)=generate-id(key('TestMethods', @className))]" />
           <xsl:variable name="classCount" select="count($classSet)" />
           <table id="ReportsTable">
-            <caption>All Tests Group By Classes</caption>
+            <caption>All Tests Grouped By Classes</caption>
             <thead>
               <tr class="odd">
-                <th scope="col">Time</th>
-                <th scope="col" abbr="Status">Status</th>
+                <!--<th scope="col">Time</th>-->
+                <!--<th scope="col" abbr="Status">Status</th>-->
                 <th scope="col" abbr="Test">
                   Classes <div class="NumberTag">
                     <xsl:value-of select="$classCount" />
                   </div>
                 </th>
-                <th scope="col" abbr="Message">Message</th>
-                <th scope="col" abbr="Exception">More</th>
+                <!--<th scope="col" abbr="Message">Message</th>-->
+                <th scope="col" abbr="Exception">Visibility</th>
               </tr>
             </thead>
             <tbody>
@@ -313,34 +306,34 @@
                 <xsl:variable name="testsSet" select="key('TestMethods', @className)" />
                 <xsl:variable name="testsCount" select="count($testsSet)" />
                 <tr>
-                  <th scope="row" class="column1">7/21/2014 10:56:45 PM</th>
-                  <td class="PackageStatus">
+                  <!--<th scope="row" class="column1">7/21/2014 10:56:45 PM</th>-->
+                  <!--<td class="PackageStatus">
                     <canvas id="{generate-id(@className)}canvas" width="100" height="25">
                     </canvas>
-                  </td>
+                  </td>-->
                   <td class="Function">
                     <xsl:value-of select="trxreport:RemoveAssemblyName(@className)" />
                   </td>
-                  <td class="Message" name="{generate-id(@className)}Id">
+                  <!--<td class="Message" name="{generate-id(@className)}Id">
                     <xsl:value-of select="concat($testsCount,' Tests')" />
-                  </td>
+                  </td>-->
                   <td class="ex">
                     <div class="OpenMoreButton" onclick="ShowHide('{generate-id(@className)}TestsContainer','{generate-id(@className)}Button','Show Tests','Hide Tests');">
-                      <div class="MoreButtonText" id="{generate-id(@className)}Button">Show Tests</div>
+                      <div class="MoreButtonText" id="{generate-id(@className)}Button">Hide Tests</div>
                     </div>
                   </td>
                 </tr>
-                <tr id="{generate-id(@className)}TestsContainer" class="hiddenRow">
+                <tr id="{generate-id(@className)}TestsContainer" class="visibleRow">
                   <td colspan="5">
-                    <div id="exceptionArrow">↳</div>
+                    <!--<div id="exceptionArrow">↳</div>-->
                     <table>
                       <thead>
                         <tr class="odd">
                           <th scope="col" class="TestsTable">Time</th>
                           <th scope="col" class="TestsTable" abbr="Status">Status</th>
                           <th scope="col" class="TestsTable" abbr="Test">Test</th>
-                          <th scope="col" class="TestsTable" abbr="Message">Message</th>
-                          <th scope="col" class="TestsTable" abbr="Message">Owner</th>
+                          <!--<th scope="col" class="TestsTable" abbr="Message">Message</th>
+                          <th scope="col" class="TestsTable" abbr="Message">Owner</th>-->
                           <th scope="col" class="TestsTable" abbr="Exception">Duration</th>
                         </tr>
                       </thead>
@@ -363,7 +356,7 @@
               </xsl:for-each>
             </tbody>
           </table>
-          <Table>
+          <!--<Table>
             <caption>Five most slowest tests</caption>
             <thead>
               <tr class="odd">
@@ -412,7 +405,7 @@
                 </td>
               </tr>
             </tbody>
-          </Table>
+          </Table>-->
         </div>
       </body>
       <script>
@@ -424,7 +417,7 @@
 
   <xsl:template name="tStatus">
     <xsl:param name="testId" />
-    <xsl:for-each select="/t:TestRun/t:Results/t:UnitTestResult[@testId=$testId]">
+    <!--<xsl:for-each select="/t:TestRun/t:Results/t:UnitTestResult[@testId=$testId]">-->
       <xsl:choose>
         <xsl:when test="@outcome='Passed'">
           <td class="passed">PASSED</td>
@@ -448,7 +441,7 @@
           <td class="info">OTHER</td>
         </xsl:otherwise>
       </xsl:choose>
-    </xsl:for-each>
+    <!--</xsl:for-each>-->
   </xsl:template>
 
 
@@ -475,7 +468,7 @@
 
 
         </td>
-        <td class="Messages">
+        <!--<td class="Messages">
           <xsl:call-template name="debugInfo">
             <xsl:with-param name="testId" select="$testId" />
           </xsl:call-template>
@@ -489,7 +482,7 @@
               <br/>
             </xsl:if>
           </xsl:for-each>
-        </td>
+        </td>-->
         <td class="Message">
           <xsl:value-of select="trxreport:ToExactTimeDefinition(@duration)" />
         </td>
@@ -497,7 +490,7 @@
       <tr id="{generate-id($testId)}Stacktrace" class="hiddenRow">
         <!--Outer-->
         <td colspan="6">
-          <div id="exceptionArrow">↳</div>
+          <!--<div id="exceptionArrow">↳</div>-->
           <table>
             <!--Inner-->
             <tbody>
