@@ -15,7 +15,6 @@
     <EmbeddedResource Include="Trxer.css" />
     <EmbeddedResource Include="TrxerTable.css" />
     <EmbeddedResource Include="functions.js" />
-    <EmbeddedResource Remove="nupkg\**" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="nupkg\**" />

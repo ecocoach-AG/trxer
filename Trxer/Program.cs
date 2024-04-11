@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Xsl;
-using TrxerConsole;
 
 namespace Trxer
 {
@@ -15,6 +14,7 @@ namespace Trxer
         /// Embedded Resource name
         /// </summary>
         private const string XsltFile = "Trxer.xslt";
+        
         /// <summary>
         /// Trxer output format
         /// </summary>

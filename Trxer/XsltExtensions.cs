@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace TrxerConsole;
+namespace Trxer;
 
 public class XsltExtensions
 {
