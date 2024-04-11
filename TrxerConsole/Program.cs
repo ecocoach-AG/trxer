@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Xsl;
 
 namespace TrxerConsole
 {
-    class Program
+    public class Program
     {
         /// <summary>
         /// Embedded Resource name
@@ -22,7 +23,7 @@ namespace TrxerConsole
         /// Main entry of TrxerConsole
         /// </summary>
         /// <param name="args">First cell shoud be TRX path</param>
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             if (args.Any() == false)
             {
@@ -43,7 +44,10 @@ namespace TrxerConsole
             XslCompiledTransform x = new XslCompiledTransform(true);
             x.Load(xsl, new XsltSettings(true, true), null);
             Console.WriteLine("Transforming...");
-            x.Transform(fileName, fileName + OUTPUT_FILE_EXT);
+            var argumentsList = new XsltArgumentList();
+            argumentsList.AddExtensionObject("urn:my-scripts", new XsltExtensions());
+            var stream = new FileStream(fileName + OUTPUT_FILE_EXT, FileMode.Create);
+            x.Transform(fileName, argumentsList, stream);
             Console.WriteLine("Done transforming xml into html");
         }
 
@@ -56,8 +60,8 @@ namespace TrxerConsole
             XmlDocument xslDoc = new XmlDocument();
             Console.WriteLine("Loading xslt template...");
             xslDoc.Load(ResourceReader.StreamFromResource(XSLT_FILE));
-            MergeCss(xslDoc);
-            MergeJavaScript(xslDoc);
+            //MergeCss(xslDoc);
+            //MergeJavaScript(xslDoc);
             return xslDoc;
         }
 
