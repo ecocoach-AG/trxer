@@ -2,51 +2,69 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Xsl;
+using TrxerConsole;
 
-namespace TrxerConsole
+namespace Trxer
 {
-    public class Program
+    public static class Program
     {
         /// <summary>
         /// Embedded Resource name
         /// </summary>
-        private const string XSLT_FILE = "Trxer.xslt";
+        private const string XsltFile = "Trxer.xslt";
         /// <summary>
         /// Trxer output format
         /// </summary>
-        private const string OUTPUT_FILE_EXT = ".html";
+        private const string OutputFileExt = ".html";
 
         /// <summary>
         /// Main entry of TrxerConsole
         /// </summary>
-        /// <param name="args">First cell shoud be TRX path</param>
+        /// <param name="args">First entry should be TRX path, second entry can optionally contain output file path.</param>
         public static void Main(string[] args)
         {
-            if (args.Any() == false)
+            if (args.Length == 0)
             {
-                Console.WriteLine("No trx file,  Trxer.exe <filename>");
+                var versionString = Assembly.GetEntryAssembly()
+                    ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+
+                Console.WriteLine($"trxer v{versionString}");
+                Console.WriteLine("-------------");
+                Console.WriteLine("\nUsage:");
+                Console.WriteLine("  trxer <path to trx file> <optional path of target output file>");
                 return;
             }
-            Console.WriteLine("Trx File\n{0}", args[0]);
-            Transform(args[0], PrepareXsl());
+            
+            var trxFilePath = args[0];
+            var outputFilePath = string.Empty;
+            
+            Console.WriteLine($"Trx file path: {trxFilePath}");
+            if (args.Length > 1)
+            {
+                outputFilePath = args[1];
+                Console.WriteLine($"Output file path: {outputFilePath}");
+            }
+
+            Transform(trxFilePath, outputFilePath, PrepareXsl());
         }
 
         /// <summary>
         /// Transforms trx int html document using xslt
         /// </summary>
         /// <param name="fileName">Trx file path</param>
+        /// <param name="outputFile">Option file path of the target output file</param> 
         /// <param name="xsl">Xsl document</param>
-        private static void Transform(string fileName, XmlDocument xsl)
+        private static void Transform(string fileName, string outputFile, XmlDocument xsl)
         {
             XslCompiledTransform x = new XslCompiledTransform(true);
             x.Load(xsl, new XsltSettings(true, true), null);
             Console.WriteLine("Transforming...");
             var argumentsList = new XsltArgumentList();
             argumentsList.AddExtensionObject("urn:my-scripts", new XsltExtensions());
-            var stream = new FileStream(fileName + OUTPUT_FILE_EXT, FileMode.Create);
+            var stream = new FileStream(string.IsNullOrEmpty(outputFile) ? fileName + OutputFileExt : outputFile, FileMode.Create);
             x.Transform(fileName, argumentsList, stream);
             Console.WriteLine("Done transforming xml into html");
         }
@@ -59,9 +77,9 @@ namespace TrxerConsole
         {
             XmlDocument xslDoc = new XmlDocument();
             Console.WriteLine("Loading xslt template...");
-            xslDoc.Load(ResourceReader.StreamFromResource(XSLT_FILE));
-            //MergeCss(xslDoc);
-            //MergeJavaScript(xslDoc);
+            xslDoc.Load(ResourceReader.StreamFromResource(XsltFile));
+            MergeCss(xslDoc);
+            MergeJavaScript(xslDoc);
             return xslDoc;
         }
 
@@ -72,11 +90,15 @@ namespace TrxerConsole
         private static void MergeJavaScript(XmlDocument xslDoc)
         {
             Console.WriteLine("Loading javascript...");
-            XmlNode scriptEl = xslDoc.GetElementsByTagName("script")[0];
-            XmlAttribute scriptSrc = scriptEl.Attributes["src"];
-            string script = ResourceReader.LoadTextFromResource(scriptSrc.Value);
-            scriptEl.Attributes.Remove(scriptSrc);
-            scriptEl.InnerText = script;
+            XmlNode scriptElement = xslDoc.GetElementsByTagName("script")[0];
+            XmlAttribute scriptSource = scriptElement?.Attributes?["src"];
+            string script = ResourceReader.LoadTextFromResource(scriptSource?.Value);
+            scriptElement?.Attributes?.Remove(scriptSource);
+            
+            if (scriptElement != null)
+            {
+                scriptElement.InnerText = script;
+            }
         }
 
         /// <summary>
@@ -93,8 +115,8 @@ namespace TrxerConsole
             foreach (XmlNode xmlElement in toChangeList)
             {
                 XmlElement styleEl = xslDoc.CreateElement("style");
-                styleEl.InnerText = ResourceReader.LoadTextFromResource(xmlElement.Attributes["href"].Value);
-                headNode.ReplaceChild(styleEl, xmlElement);
+                styleEl.InnerText = ResourceReader.LoadTextFromResource(xmlElement.Attributes?["href"]?.Value);
+                headNode?.ReplaceChild(styleEl, xmlElement);
             }
         }
     }

@@ -6,12 +6,22 @@
     <LangVersion>10</LangVersion>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <OutputType>Exe</OutputType>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>trxer</ToolCommandName>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Trxer.xslt" />
     <EmbeddedResource Include="Trxer.css" />
     <EmbeddedResource Include="TrxerTable.css" />
     <EmbeddedResource Include="functions.js" />
+    <EmbeddedResource Remove="nupkg\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="nupkg\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="nupkg\**" />
   </ItemGroup>
 
   <PropertyGroup>
