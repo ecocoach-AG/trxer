@@ -2,13 +2,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <LangVersion>10</LangVersion>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <OutputType>Exe</OutputType>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>dotnet-trxer</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
+    <PackageReleaseNotes>1.1.0:
+- Adapted Trxer to trx-merge summary format
+
+1.0.0:
+- Updated Trxer to .net6</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Trxer.xslt" />
