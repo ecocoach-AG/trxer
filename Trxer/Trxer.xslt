@@ -17,7 +17,7 @@
         <link rel="stylesheet" type="text/css" href="TrxerTable.css"/>
         <script language="javascript" type="text/javascript" src="functions.js" />
         <title>
-          <xsl:value-of select="/t:TestRun/@name"/>
+          <xsl:value-of select="/t:TestRun/t:TestRunConfiguration/t:Description"/>
         </title>
       </head>
       <body>
@@ -27,14 +27,14 @@
             <img src="" id="floatingImage"/>
           </div>
           <br />
-          <xsl:variable name="testRunOutcome" select="t:TestRun/t:ResultSummary/@outcome"/>
+          <xsl:variable name="testRunOutcome" select="/t:TestRun/t:TestRunConfiguration/t:Description"/>
 
           <div class="StatusBar statusBar{$testRunOutcome}">
             <div class="statusBar{$testRunOutcome}Inner">
               <center>
                 <h1 class="hWhite">
                   <div class="titleCenterd">
-                    <xsl:value-of select="/t:TestRun/@name"/>
+                    <xsl:value-of select="/t:TestRun/t:TestRunConfiguration/t:Description"/>
                   </div>
                 </h1>
               </center>
@@ -102,29 +102,11 @@
                   <td class="statusCount">
                     <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@total" />
                   </td>
-                  <th scope="row" class="column1 statusCount">Inconclusive</th>
-                  <td class="statusCount">
-                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@inconclusive" />
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row" class="column1 statusCount">Executed</th>
-                  <td class="statusCount">
-                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@executed" />
-                  </td>
-                  <th scope="row" class="column1 statusCount">Error</th>
-                  <td class="statusCount">
-                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@error" />
-                  </td>
                 </tr>
                 <tr>
                   <th scope="row" class="column1 statusCount">Passed</th>
                   <td class="statusCount">
                     <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@passed" />
-                  </td>
-                  <th scope="row" class="column1 statusCount">Warning</th>
-                  <td class="statusCount">
-                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@warning" />
                   </td>
                 </tr>
                 <tr>
@@ -132,9 +114,11 @@
                   <td class="statusCount">
                     <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@failed" />
                   </td>
-                  <th scope="row" class="column1 statusCount">Timeout</th>
+                </tr>
+                <tr>
+                  <th scope="row" class="column1 statusCount">Skipped</th>
                   <td class="statusCount">
-                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@timeout" />
+                    <xsl:value-of select="/t:TestRun/t:ResultSummary/t:Counters/@notexecuted" />
                   </td>
                 </tr>
               </tbody>
@@ -361,6 +345,9 @@
         </xsl:when>
         <xsl:when test="@outcome='Warn'">
           <td class="warn">Warn</td>
+        </xsl:when>
+        <xsl:when test="@outcome='NotExecuted'">
+          <td class="info">Skipped</td>
         </xsl:when>
         <xsl:otherwise>
           <td class="info">OTHER</td>

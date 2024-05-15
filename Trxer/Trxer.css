@@ -51,6 +51,7 @@ address {
 .titleCenterd {
     position: relative;
     top: 12px;
+    color: #425b71;
 }
 
 .StatusBar {
@@ -202,7 +203,7 @@ a:focus {
 }
 
 #divToRefresh > div.SummaryDiv > table.DetailsTable > tbody > tr > th {
-    width: 30px;
+    /* width: 30px; */
     /*background-color: #FFFFFF;*/
 }
 
@@ -211,7 +212,7 @@ td.slowest {
 }
 
 #TotalTestsTable {
-    min-width: 250px;
+    min-width: 300px;
     width: auto;
     float: left;
     margin-right: 20px;
@@ -236,7 +237,7 @@ td.slowest {
 
 .column1 {
     background: #dbedff;
-    width: 170px;
+    width: 220px;
 }
 
 .column1Failed {
@@ -246,7 +247,7 @@ td.slowest {
 
 #ReportsTable > tbody > tr > th {
     background: #E8E8E8;
-    width: 170px;
+    width: 220px;
 }
 
 #ReportsTable th {
